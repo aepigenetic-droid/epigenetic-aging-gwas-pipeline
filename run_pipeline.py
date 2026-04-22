@@ -1,22 +1,31 @@
 import subprocess
 import sys
 from pathlib import Path
+import argparse
+import datetime
 
 
 # ================================
-# HELPER FUNCTION
+# HELPER FUNCTIONS
 # ================================
 def run_step(step):
     print("\nRunning:", " ".join(step))
     try:
         subprocess.run(step, check=True)
-    except subprocess.CalledProcessError as e:
+    except subprocess.CalledProcessError:
         print(f"Step failed: {step}")
         sys.exit(1)
 
 
+def run_phase(phase_name, steps):
+    print(f"\n=== {phase_name} ===")
+    for step in steps:
+        run_step(step)
+    print(f"\n{phase_name} completed.")
+
+
 # ================================
-# PHASE A: SETUP + REFERENCES
+# PHASE DEFINITIONS
 # ================================
 PHASE_A = [
     ["python", "src/setup/create_structure.py"],
@@ -39,7 +48,6 @@ PHASE_B = [
     ["python", "src/gwas/filter_snps.py"],
     ["python", "src/gwas/validate_sumstats.py"],
 ]
-["bash", "scripts/install_ldsc.sh"],
 
 PHASE_C = [
     ["bash", "scripts/install_ldsc.sh"],
@@ -48,37 +56,52 @@ PHASE_C = [
     ["python", "src/ldsc/03_run_rg.py"],
     ["python", "src/ldsc/04_parse_ldsc_logs.py"],
 ]
+
 PHASE_D = [
     ["bash", "src/annotations/01_download_chromhmm.sh"],
     ["bash", "src/annotations/02_download_h3k27ac.sh"],
     ["python", "src/annotations/03_build_consensus.py"],
     ["python", "src/annotations/04_qc_annotations.py"],
 ]
+
+ALL_PHASES = {
+    "A": ("Phase A: Setup and Reference Data", PHASE_A),
+    "B": ("Phase B: GWAS Processing", PHASE_B),
+    "C": ("Phase C: LDSC Analysis", PHASE_C),
+    "D": ("Phase D: Epigenomic Annotations", PHASE_D),
+}
+
+
 # ================================
 # MAIN EXECUTION
 # ================================
 def main():
-    print("\nStarting pipeline...\n")
 
-    # Ensure we are at project root
+    parser = argparse.ArgumentParser(description="Run pipeline phases")
+    parser.add_argument(
+        "--phase",
+        choices=["A", "B", "C", "D", "ALL"],
+        default="ALL",
+        help="Select phase to run"
+    )
+    args = parser.parse_args()
+
+    print("\nStarting pipeline...")
+    print("Timestamp:", datetime.datetime.now())
+
     project_root = Path(__file__).resolve().parent
-    print(f"Project root: {project_root}")
+    print("Project root:", project_root)
 
-    # Run Phase A
-    print("\n=== Phase A: Setup and Reference Data ===")
-    for step in PHASE_A:
-        run_step(step)
+    if args.phase == "ALL":
+        for key in ["A", "B", "C", "D"]:
+            name, steps = ALL_PHASES[key]
+            run_phase(name, steps)
+    else:
+        name, steps = ALL_PHASES[args.phase]
+        run_phase(name, steps)
 
-    print("\nPhase A completed successfully.")
-    print("\n=== Phase B: GWAS Processing ===")
-    for step in PHASE_B:
-        run_step(step)
-    print("\n=== Phase C: LDSC Analysis ===")
-    for step in PHASE_C:
-        run_step(step)
-    print("\n=== Phase D: Epigenomic Annotations ===")
-    for step in PHASE_D:
-        run_step(step)
+    print("\nPipeline finished successfully.")
+
 
 # ================================
 # ENTRY POINT
