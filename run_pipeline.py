@@ -48,6 +48,12 @@ PHASE_C = [
     ["python", "src/ldsc/03_run_rg.py"],
     ["python", "src/ldsc/04_parse_ldsc_logs.py"],
 ]
+PHASE_D = [
+    ["bash", "src/annotations/01_download_chromhmm.sh"],
+    ["bash", "src/annotations/02_download_h3k27ac.sh"],
+    ["python", "src/annotations/03_build_consensus.py"],
+    ["python", "src/annotations/04_qc_annotations.py"],
+]
 # ================================
 # MAIN EXECUTION
 # ================================
@@ -69,6 +75,9 @@ def main():
         run_step(step)
     print("\n=== Phase C: LDSC Analysis ===")
     for step in PHASE_C:
+        run_step(step)
+    print("\n=== Phase D: Epigenomic Annotations ===")
+    for step in PHASE_D:
         run_step(step)
 
 # ================================
