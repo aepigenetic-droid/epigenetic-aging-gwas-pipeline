@@ -1,0 +1,67 @@
+name: epigenetic-aging
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+
+dependencies:
+  # ======================
+  # PYTHON CORE
+  # ======================
+  - python=3.10
+  - pip
+
+  # ======================
+  # DATA SCIENCE
+  # ======================
+  - numpy
+  - pandas
+  - scipy
+  - scikit-learn
+
+  # ======================
+  # VISUALIZATION
+  # ======================
+  - matplotlib
+  - seaborn
+
+  # ======================
+  # UTILITIES
+  # ======================
+  - pyyaml
+  - tqdm
+  - requests
+
+  # ======================
+  # GENOMICS / FILE HANDLING
+  # ======================
+  - pysam
+
+  # ======================
+  # R ENVIRONMENT (LDSC COMPATIBILITY)
+  # ======================
+  - r-base=4.2
+  - r-data.table
+  - r-optparse
+
+  # ======================
+  # SYSTEM TOOLS
+  # ======================
+  - wget
+  - curl
+  - unzip
+  - gzip
+  - bzip2
+  - make
+  - gcc
+
+  # ======================
+  # OPTIONAL (SAFE ADDITIONS)
+  # ======================
+  - cython
+
+  # ======================
+  # PIP-ONLY PACKAGES
+  # ======================
+  - pip:
+      - shap
