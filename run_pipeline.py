@@ -29,7 +29,16 @@ PHASE_A = [
     ["python", "src/reference/verify_hashes.py"],
 ]
 
-
+PHASE_B = [
+    ["python", "src/gwas/traits_metadata.py"],
+    ["python", "src/gwas/download_gwas.py"],
+    ["python", "src/gwas/vcf_to_tsv.py"],
+    ["python", "src/gwas/harmonize_sumstats.py"],
+    ["python", "src/gwas/qc_checks.py"],
+    ["python", "src/gwas/allele_standardization.py"],
+    ["python", "src/gwas/filter_snps.py"],
+    ["python", "src/gwas/validate_sumstats.py"],
+]
 # ================================
 # MAIN EXECUTION
 # ================================
@@ -46,7 +55,9 @@ def main():
         run_step(step)
 
     print("\nPhase A completed successfully.")
-
+    print("\n=== Phase B: GWAS Processing ===")
+    for step in PHASE_B:
+        run_step(step)
 
 # ================================
 # ENTRY POINT
