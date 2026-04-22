@@ -39,6 +39,15 @@ PHASE_B = [
     ["python", "src/gwas/filter_snps.py"],
     ["python", "src/gwas/validate_sumstats.py"],
 ]
+["bash", "scripts/install_ldsc.sh"],
+
+PHASE_C = [
+    ["bash", "scripts/install_ldsc.sh"],
+    ["python", "src/ldsc/01_munge_sumstats.py"],
+    ["python", "src/ldsc/02_run_h2.py"],
+    ["python", "src/ldsc/03_run_rg.py"],
+    ["python", "src/ldsc/04_parse_ldsc_logs.py"],
+]
 # ================================
 # MAIN EXECUTION
 # ================================
