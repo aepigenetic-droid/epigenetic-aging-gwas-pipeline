@@ -67,6 +67,9 @@ def main():
     print("\n=== Phase B: GWAS Processing ===")
     for step in PHASE_B:
         run_step(step)
+    print("\n=== Phase C: LDSC Analysis ===")
+    for step in PHASE_C:
+        run_step(step)
 
 # ================================
 # ENTRY POINT
